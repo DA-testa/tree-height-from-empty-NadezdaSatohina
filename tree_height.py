@@ -3,41 +3,45 @@
 import sys
 import threading
 
-def compute_height(n, parents):
-    adj_list = [[] for _ in range(n)]
-    for i, p in enumerate(parents):
-        if p != -1:
-            adj_list[p].append(i)
+import numpy as np
 
-    max_height = 0
-    stack = [(None, parents.index(-1), 0)]
-    while stack:
-        parent, node, height = stack.pop()
-        if height > max_height:
-            max_height = height
-        for child in adj_list[node]:
-            if child != parent:
-                stack.append((node, child, height + 1))
+def compute_height(adj_list):
+    def dfs(node, depth):
+        nonlocal max_depth
+        if not adj_list[node]:
+            max_depth = max(max_depth, depth)
+        else:
+            for child in adj_list[node]:
+                dfs(child, depth+1)
 
-    return max_height
+    max_depth = 0
+    dfs(0, 0)
+    return max_depth
+
+max_children = max(len(children) for children in adj_list.values())
+adj_array = np.full((n, max_children), -1)
+for i, children in adj_list.items():
+    adj_array[i,:len(children)] = children
+
 
 def main():
     input_type = input()
 
     if "F" in input_type:
         filename = input()
-        if "a" in filename or "A" in filename:
+        if ".a" in filename:
             return
-        if not filename.startswith("test/"):
+        if "test/" not in filename:
             filename = "test/" + filename
-        with open(filename) as f:
-            n = int(f.readline().strip())
-            parents = list(map(int, f.readline().strip().split()))
-            height = compute_height(n, parents)
+        if "test/" in filename:    
+            with open(filename) as f:
+                n = int(f.readline().strip())
+                parents = list(map(int, f.readline().strip().split()))
+                height = compute_height(adj_list)
     elif "I" in input_type:
         n = int(input())
         parents = list(map(int, input().split()))
-        height = compute_height(n, parents)
+        height = compute_height(adj_list)
 
     print(height)
 #def compute_height(n, parents):
