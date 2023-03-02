@@ -3,22 +3,43 @@
 import sys
 import threading
 
-tree_len = int(input("Node Count:"))
-input_arr = [int(node) for node in input("Nodes: ").split(" ")]
+def compute_height(nodes, parents):
+    adj_list = [[] for _ in range(nodes)]
+    for i, par in enumerate(parents):
+        if par != -1:
+            adj_list[par].append(i)
 
-def get_child_nodes(nodes_to_find, initial_input, level):
-    level += 1
-    child_nodes = []
-    for node in nodes_to_find: #[0] -> [4] -> [1] -> [2, 5]
-        for index, pointer in enumerate(initial_input): #[(0, -1), (1, 3), (2, 1), (3, 0), (4, 1), (5, 2)]
-            if pointer == node:
-                child_nodes.append(index)
-    if child_nodes:
-        level = get_child_nodes(child_nodes, initial_input, level)
-    return level
-    
-result = get_child_nodes([input_arr.index(-1)], input_arr, 0)
-print(result)
+    max_height = 0
+    stack = [(None, parents.index(-1), 0)]
+    while stack:
+        parent, node, height = stack.pop()
+        if height > max_height:
+            max_height = height
+        for child in adj_list[node]:
+            if child != parent:
+                stack.append((node, child, height + 1))
+
+    return max_height
+
+def main():
+    input_type = input()
+
+    if "F" in input_type:
+        filename = input()
+        if ".a" in filename:
+            return
+        if not filename.startswith("test/"):
+            filename = "test/" + filename
+        with open(filename) as f:
+            nodes = int(f.readline().strip())
+            parents = list(map(int, f.readline().strip().split()))
+            height = compute_height(nodes, parents)
+    elif "I" in input_type:
+        nodes = int(input())
+        parents = list(map(int, input().split()))
+        height = compute_height(nodes, parents)
+
+    print(height)
 #def compute_height(n, parents):
     # Write this function
     #max_height = 0
