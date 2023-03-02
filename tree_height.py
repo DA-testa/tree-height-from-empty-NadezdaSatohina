@@ -6,9 +6,9 @@ import threading
 
 def compute_height(n, parents):
     adj_list = [[] for _ in range(n)]
-    for i, p in enumerate(parents):
-        if p != -1:
-            adj_list[p].append(i)
+    for i, par in enumerate(parents):
+        if par != -1:
+            adj_list[par].append(i)
 
     max_height = 0
     stack = [(None, parents.index(-1), 0)]
