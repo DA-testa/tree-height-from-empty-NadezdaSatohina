@@ -3,11 +3,11 @@
 import sys
 import threading
 
-def compute_height(nodes, parents):
-    adj_list = [[] for _ in range(nodes)]
-    for i, par in enumerate(parents):
-        if par != -1:
-            adj_list[par].append(i)
+def compute_height(n, parents):
+    adj_list = [[] for _ in range(n)]
+    for i, p in enumerate(parents):
+        if p != -1:
+            adj_list[p].append(i)
 
     max_height = 0
     stack = [(None, parents.index(-1), 0)]
@@ -26,18 +26,18 @@ def main():
 
     if "F" in input_type:
         filename = input()
-        if ".a" in filename:
+        if "a" in filename or "A" in filename:
             return
         if not filename.startswith("test/"):
             filename = "test/" + filename
         with open(filename) as f:
-            nodes = int(f.readline().strip())
+            n = int(f.readline().strip())
             parents = list(map(int, f.readline().strip().split()))
-            height = compute_height(nodes, parents)
+            height = compute_height(n, parents)
     elif "I" in input_type:
-        nodes = int(input())
+        n = int(input())
         parents = list(map(int, input().split()))
-        height = compute_height(nodes, parents)
+        height = compute_height(n, parents)
 
     print(height)
 #def compute_height(n, parents):
