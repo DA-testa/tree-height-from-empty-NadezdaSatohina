@@ -4,7 +4,7 @@ import sys
 import threading
 
 
-def compute_height(n, parents):
+def compute_height(n, parents):  
     adj_list = [[] for _ in range(n)]
     for i, par in enumerate(parents):
         if par != -1:
