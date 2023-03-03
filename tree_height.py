@@ -27,7 +27,7 @@ def main():
 
     if "F" in input_type:
         filename = input()
-        if "a" in filename or "A" in filename:
+        if ".a" in filename or "A" in filename:
             return
         if not filename.startswith("test/"):
             filename = "test/" + filename
