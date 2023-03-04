@@ -4,43 +4,43 @@ import sys
 import threading
 
 
-def compute_height(n, parents):  
-    adj_list = [[] for _ in range(n)]
-    for i, par in enumerate(parents):
-        if par != -1:
-            adj_list[par].append(i)
 
-    max_height = 0
-    stack = [(None, parents.index(-1), 0)]
-    while stack:
-        parent, node, height = stack.pop()
-        if height > max_height:
-            max_height = height
-        for child in adj_list[node]:
-            if child != parent:
-                stack.append((node, child, height + 1))
+def compute_height(n, parents):
+    def get_child_nodes(nodes_to_find, initial_input, level):
+        level += 1
+        child_nodes = []
+        for node in nodes_to_find:
+            for index, pointer in enumerate(initial_input):
+                if pointer == node:
+                    child_nodes.append(index)
+        if child_nodes:
+            level = get_child_nodes(child_nodes, initial_input, level)
+        return level
 
-    return max_height
+    height = get_child_nodes([parents.index(-1)], parents, 0)
+    return height
 
 def main():
-    input_type = input()
-
+    input_type = input("Input Type: ")
     if "F" in input_type:
-        filename = input()
-        if ".a" in filename or "A" in filename:
+        filename = input("Input File Name: ")
+        if "a" in filename:
+            print("Files with letter 'a' are not allwed")
             return
-        if not filename.startswith("test/"):
+        if "test/" not in filename:
             filename = "test/" + filename
-        with open(filename) as f:
-            n = int(f.readline().strip())
-            parents = list(map(int, f.readline().strip().split()))
-            height = compute_height(n, parents)
+        if "test/" in filename:    
+            with open(filename) as f:
+                n = int(f.readline().strip())
+                parents = list(map(int, f.readline().strip().split()))
+                height = compute_height(n, parents)
     elif "I" in input_type:
-        n = int(input())
-        parents = list(map(int, input().split()))
+        n = int(input("Input Number of Nodes: "))
+        parents = list(map(int, input("Input Nodes: ").split()))
         height = compute_height(n, parents)
 
     print(height)
+    return height
 
 
 #def compute_height(n, parents):
