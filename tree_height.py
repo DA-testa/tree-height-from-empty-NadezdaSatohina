@@ -6,20 +6,20 @@ import threading
 
 
 def compute_height(n, parents):
-    nodes_arr = [[] for i in range(n)]
+    nodes = [[] for i in range(n)]
 
     root = 0
     for i in range(n):
         if parents[i] == -1:
             root = i
         else:
-            nodes_arr[parents[i]].append(i)
+            nodes[parents[i]].append(i)
 
     def dfs(node):
-        levels = []
-        for child in nodes_arr[node]:
-            levels.append(dfs(child))
-        if not levels:
+        heights = []
+        for child in nodes[node]:
+            heights.append(dfs(child))
+        if not heights:
             return 1
         return max(heights) + 1
 
@@ -27,11 +27,11 @@ def compute_height(n, parents):
 
 
 def main():
-    input_type = input("Input Type: ")
+    input_type = input()
+
     if "F" in input_type:
-        filename = input("Input File Name: ")
-        if "a" in filename:
-            print("Files with letter 'a' are not allwed")
+        filename = input()
+        if ".a" in filename:
             return
         if "test/" not in filename:
             filename = "test/" + filename
@@ -41,11 +41,12 @@ def main():
                 parents = list(map(int, f.readline().strip().split()))
                 height = compute_height(n, parents)
     elif "I" in input_type:
-        n = int(input("Input Number of Nodes: "))
+        n = int(input())
         parents = list(map(int, input().split()))
         height = compute_height(n, parents)
 
     print(height)
+
 
 
 
