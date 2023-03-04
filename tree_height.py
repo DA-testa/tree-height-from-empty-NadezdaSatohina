@@ -40,7 +40,6 @@ def main():
         height = compute_height(n, parents)
 
     print(height)
-    return height
 
 
 #def compute_height(n, parents):
