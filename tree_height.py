@@ -6,19 +6,25 @@ import threading
 
 
 def compute_height(n, parents):
-    def get_child_nodes(nodes_to_find, initial_input, level):
-        level += 1
-        child_nodes = []
-        for node in nodes_to_find:
-            for index, pointer in enumerate(initial_input):
-                if pointer == node:
-                    child_nodes.append(index)
-        if child_nodes:
-            level = get_child_nodes(child_nodes, initial_input, level)
-        return level
+    nodes_arr = [[] for i in range(n)]
 
-    height = get_child_nodes([parents.index(-1)], parents, 0)
-    return height
+    root = 0
+    for i in range(n):
+        if parents[i] == -1:
+            root = i
+        else:
+            nodes_arr[parents[i]].append(i)
+
+    def dfs(node):
+        levels = []
+        for child in nodes_arr[node]:
+            levels.append(dfs(child))
+        if not levels:
+            return 1
+        return max(heights) + 1
+
+    return dfs(root)
+
 
 def main():
     input_type = input("Input Type: ")
@@ -36,11 +42,12 @@ def main():
                 height = compute_height(n, parents)
     elif "I" in input_type:
         n = int(input("Input Number of Nodes: "))
-        parents = list(map(int, input("Input Nodes: ").split()))
+        parents = list(map(int, input().split()))
         height = compute_height(n, parents)
 
     print(height)
-    return height
+
+
 
 
 #def compute_height(n, parents):
