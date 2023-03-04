@@ -21,10 +21,10 @@ def compute_height(n, parents):
     return height
 
 def main():
-    input_type = input()
+    input_type = input("Input Type: ")
     if "F" in input_type:
-        filename = input()
-        if ".a" in filename:
+        filename = input("Input File Name: ")
+        if "a" in filename:
             print("Files with letter 'a' are not allwed")
             return
         if "test/" not in filename:
@@ -35,11 +35,12 @@ def main():
                 parents = list(map(int, f.readline().strip().split()))
                 height = compute_height(n, parents)
     elif "I" in input_type:
-        n = int(input())
-        parents = list(map(int, input().split()))
+        n = int(input("Input Number of Nodes: "))
+        parents = list(map(int, input("Input Nodes: ").split()))
         height = compute_height(n, parents)
 
     print(height)
+    return height
 
 
 #def compute_height(n, parents):
