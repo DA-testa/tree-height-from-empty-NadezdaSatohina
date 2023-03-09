@@ -6,27 +6,23 @@ import threading
 
 
 def compute_height(n, parents):
-    def get_child_nodes(nodes_to_find, node_input, level):
-        level += 1
-        child_nodes = []
-        removable_nodes = []
-        for og_index, parent in nodes_to_find:
-            for index, node in enumerate(node_input):
-                if node[1] == og_index:
-                    child_nodes.append(node)
-                    removable_nodes.append(index)
-                    
-        removable_nodes.sort(reverse = True)
-        for index in removable_nodes:
-            del node_input[index]
-        if child_nodes:
-            level = get_child_nodes(child_nodes, node_input, level)
-        return level
+    heights = [-1] * n
 
-    root_index = [i[0] for i in parents if i[1] == -1][0]
-    nodes_to_find = parents.pop(root_index)
-    height = get_child_nodes([nodes_to_find], parents, 0)
-    return height
+    def dd(i):
+        if parents[i] == -1:
+            return 0
+
+        if heights[i] > -1:
+            return heights[i]
+
+        heights[i] = 1 + dd(parents[i])
+
+        return heights[i]
+
+    for i in range(n):
+        heights[i] = dd(i)
+
+    return 1 + max(heights)
 
 def main():
     input_type = input("Input Type: ")
@@ -44,11 +40,8 @@ def main():
     elif "I" in input_type:
         n = int(input("Input Number of Nodes: "))
         parents = list(map(int, input("Input Nodes: ").split()))
-    
-    node_input = []
-    for index, node in enumerate(parents):
-        node_input.append((index, node))
-    height = compute_height(n, node_input) #create list of tuples
+
+    height = compute_height(n, parents) #create list of tuples
 
     print(height)
     return height
